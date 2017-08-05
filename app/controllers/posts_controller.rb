@@ -10,15 +10,30 @@ class PostsController < ApplicationController
     @post.user = current_user
     @post.save
 
-    redirect_to posts_path
   end
 
   def destroy
     @post = current_user.posts.find(params[:id]) #只能删除自己的贴文
     @post.destroy
 
+    render :js => "alert('ok');"
+  end
+
+    def like
+    @post = Post.find(params[:id])
+    unless @post.find_like(current_user)  # 如果已经按讚过了，就略过不再新增
+      Like.create( :user => current_user, :post => @post)
+    end
+
     redirect_to posts_path
   end
+
+  def unlike
+    @post = Post.find(params[:id])
+    like = @post.find_like(current_user)
+    like.destroy
+
+    redirect_to posts_path
 
   protected
 
