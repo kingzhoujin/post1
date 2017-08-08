@@ -36,9 +36,12 @@
   <% end %>
 </div>
 <script>
+
+  $(".raty").raty( { path: '/images/' } );
+
   $(".toggle-flag").on('change', function(){
     var url = $(this).data("url");
-
+    var that = this;
     $.ajax({
       url: url,
       method: "POST",
